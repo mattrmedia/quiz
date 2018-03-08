@@ -1,0 +1,30 @@
+{
+  "name": "ixrquiz",
+  "version": "1.0.0",
+  "description": "html / js  for IXRDemo quizzes",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build:js": "browserify src/js/index.js -d -t babelify -o build/js/bundle.js",
+    "watch:js": "watchify src/js/index.js -d -v -t babelify -o build/js/bundle.js",
+    "build-task:scss-compile": "node-sass-chokidar --source-map true src/scss/styles.scss -o build/css",
+    "build-task:autoprefixer": "postcss build/css/*.css --use autoprefixer -d build/css",
+    "build:scss": "npm-run-all -p build-task:*",
+    "watch:scss": "chokidar 'src/scss/**/*.scss' -c 'npm run build:scss'",
+    "dev": "npm-run-all -p sass:*"
+  },
+  "dependencies": {
+    "autoprefixer": "^7.2.4",
+    "babel-core": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babelify": "^8.0.0",
+    "browserify": "^15.0.0",
+    "chokidar-cli": "^1.2.0",
+    "jsdom": "^11.6.2",
+    "jsdom-global": "^3.0.2",
+    "node-sass-chokidar": "^0.0.3",
+    "npm-run-all": "^4.1.2",
+    "postcss-cli": "^4.1.1",
+    "watchify": "^3.9.0"
+  }
+}
