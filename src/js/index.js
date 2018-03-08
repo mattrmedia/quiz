@@ -5,7 +5,7 @@ const q1 = {
   answer: 'Baby don\'t hurt me',
   solutions: ['Never gonna give you up', 'You outta know', 'A battlefield', 'Baby don\'t hurt me'],
   image: 'https://placeimg.com/480/480/people',
-  explanation: 'So what is right and what is wrong? <strong>Gimme a sign.</strong>',
+  explanation: 'So what is right and what is wrong? <strong>Gimme a sign.</strong>'
 };
 
 const q2 = {
@@ -15,7 +15,7 @@ const q2 = {
   answer: 'true',
   solutions: ['true', 'false'],
   image: 'https://placeimg.com/480/480/people',
-  explanation: 'Let\'s not go to Camelot. It is a silly place.',
+  explanation: 'Let\'s not go to Camelot. It is a silly place.'
 };
 
 const questions = [q1, q2];
@@ -29,6 +29,7 @@ let index = 0;
 let results = 0;
 let query = questions[index];
 
+
 const result = (e) => {
   const answer = e.target.previousSibling.value;
 
@@ -39,6 +40,7 @@ const result = (e) => {
     return false;
   }
 };
+
 
 const display = (e) => {
   let bool = result(e);
@@ -95,13 +97,14 @@ const build = () => {
         populate(query[key], solutions);
         break;
       case 'type':
+        console.log(query[key], type)
         populate(query[key], type);
         break;
       case 'question':
         populate(query[key], question);
         break;
       default:
-        return;
+        console.log(key);
     }
   }
 
