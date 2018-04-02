@@ -5,7 +5,7 @@ const q1 = {
   answer: 'Baby don\'t hurt me',
   solutions: ['Never gonna give you up', 'You outta know', 'A battlefield', 'Baby don\'t hurt me'],
   image: 'https://placeimg.com/480/480/people',
-  explanation: 'So what is right and what is wrong? <strong>Gimme a sign.</strong>'
+  explanation: 'So what is right and what is wrong? <strong>Gimme a sign.</strong>',
 };
 
 const q2 = {
@@ -15,55 +15,27 @@ const q2 = {
   answer: 'true',
   solutions: ['true', 'false'],
   image: 'https://placeimg.com/480/480/people',
-  explanation: 'Let\'s not go to Camelot. It is a silly place.'
+  explanation: 'Let\'s not go to Camelot. It is a silly place.',
 };
 
 const questions = [q1, q2];
-const type = document.querySelector('.type');
-const question = document.querySelector('.question');
-const image = document.querySelector('.question__image');
-const solutions = document.querySelector('.quiz__solutions');
-const progress = document.querySelector('.quiz__progress');
 
 let index = 0;
 let results = 0;
 let query = questions[index];
 
-
-const result = (e) => {
-  const answer = e.target.previousSibling.value;
-
-  if (answer !== undefined) {
-    if (answer === query.answer) {
-      return true;
-    }
-    return false;
-  }
-};
-
-
-const display = (e) => {
-  let bool = result(e);
-  solutions.innerHTML = '<button class="quiz__btn next">Next</button>';
-  solutions.childNodes[0].addEventListener('click', next);
-
-  if (bool) {
-    type.style = 'background-color: green;';
-    type.innerHTML = 'Correct!';
-    results += 1;
-  } else {
-    type.style = 'background-color: red;';
-    type.innerHTML = 'Incorrect!';
-  }
-  question.innerHTML = query.explanation;
-};
+const type = document.querySelector('.type');
+const question = document.querySelector('.question');
+const image = document.querySelector('.question__image');
+const solutions = document.querySelector('.quiz__solutions');
+// const progress = document.querySelector('.quiz__progress');
 
 const buildRadios = (arr) => {
   const radios = [];
 
   arr.forEach((value, i) => {
     const solution =
-      `<div><input type="radio" id="solution_${i}" name="solution" value="${value}"><label class="quiz__btn" for="solution_${i}">${value}</label></div>`
+      `<div><input type="radio" id="solution_${i}" name="solution" value="${value}"><label class="quiz__btn" for="solution_${i}">${value}</label></div>`;
     radios.push(solution);
   });
   return radios;
@@ -78,40 +50,27 @@ const populate = (data, node) => {
     radios.forEach((solution) => {
       const input = new DOMParser().parseFromString(solution, 'text/html').body.firstChild;
 
-      input.addEventListener('click', display);
+      input.addEventListener('click', displayResult);
       node.append(input);
     });
+  } else if (data.indexOf('http://') === 0 || data.indexOf('https://') === 0) {
+    node.src = data;
   } else {
     node.append(data);
   }
 };
 
 const build = () => {
-  // This needs re-factoring rely less on this switch and just build
-  for (key in query) {
-    switch(key) {
-      case 'image':
-        image.src = query[key];
-        break;
-      case 'solutions':
-        populate(query[key], solutions);
-        break;
-      case 'type':
-        console.log(query[key], type)
-        populate(query[key], type);
-        break;
-      case 'question':
-        populate(query[key], question);
-        break;
-      default:
-        console.log(key);
-    }
-  }
+  const nodes = {
+    type,
+    question,
+    image,
+    solutions,
+  };
 
-  for (let i = 0; i < questions.length; i++) {
-    const div = document.createElement('div');
-    populate(div, progress);
-  }
+  Object.keys(nodes).forEach((key) => {
+    populate(query[key], nodes[key]);
+  });
 };
 
 const next = () => {
@@ -123,6 +82,36 @@ const next = () => {
   } else {
     alert('you got ' + results + ' out of ' + questions.length + ' correct');
   }
+};
+
+
+const result = (selection) => {
+  if (selection !== undefined) {
+    if (selection === query.answer) {
+      return true;
+    }
+    return false;
+  }
+  return false;
+};
+
+
+const displayResult = (e) => {
+  const userSelection = e.target.previousSibling.value;
+  const correct = result(userSelection);
+
+  solutions.innerHTML = '<button class="quiz__btn next">Next</button>';
+  solutions.childNodes[0].addEventListener('click', next);
+
+  if (correct) {
+    type.style = 'background-color: green;';
+    type.innerHTML = 'Correct!';
+    results += 1;
+  } else {
+    type.style = 'background-color: red;';
+    type.innerHTML = 'Incorrect!';
+  }
+  question.innerHTML = query.explanation;
 };
 
 document.addEventListener('DOMContentLoaded', build);
