@@ -31,23 +31,12 @@
   const solutions = document.querySelector('.quiz__solutions');
   // const progress = document.querySelector('.quiz__progress');
 
-  const buildRadios = (arr) => {
-    const radios = [];
-
-    arr.forEach((value, i) => {
-      const solution =
-        `<div><input type="radio" id="solution_${i}" name="solution" value="${value}"><label class="quiz__btn" for="solution_${i}">${value}</label></div>`;
-      radios.push(solution);
-    });
-    return radios;
-  };
-
   const populate = (data, node) => {
     node.innerHTML = '';
     node.style = '';
 
     if (Array.isArray(data)) {
-      const radios = buildRadios(data);
+      const radios = data.map((value, i) => `<div><input type="radio" id="solution_${i}" name="solution" value="${value}"><label class="quiz__btn" for="solution_${i}">${value}</label></div>`);
       radios.forEach((solution) => {
         const input = new DOMParser().parseFromString(solution, 'text/html').body.firstChild;
 
